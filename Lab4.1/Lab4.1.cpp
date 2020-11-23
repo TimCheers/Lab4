@@ -14,56 +14,88 @@ int main()
 	SetConsoleOutputCP(1251);
 	setlocale(LC_ALL, "ru");
 
-	int size,value;
+	int size,value,k=0;
 	string tipe = "слово";
 	cout << "Введите размер изначального стека"<<endl;
 	cin >> size;
 
 	int* Stack = new int[size];
-	/*enum Tipe
-	{
-		добавить, удалить, стоп
-	};*/
 
 	cout << "Введите начальный стек"<<endl;
 	for (int i = 0; i < size; i++)
 	{
 		cin >> Stack[i];
+		k++;
 	}
-	cout << "Введите команду (добавить(+число), удалить, стоп)"<<endl;
+	cout << "\tВведите команду (добавить(+число), удалить, стоп)"<<endl;
 	while (tipe!="стоп")
 	{
 		cin >> tipe;
-		if (tipe=="удалить")
+		cout << endl;
+		if (tipe == "стоп" || tipe == "удалить" || tipe == "добавить")
 		{
-			size--;
-			int* newStack = new int [size];
-			for (int i = 0; i < size; i++)
+			if (tipe != "стоп")
 			{
-				newStack[i] = Stack[i];
+				if (tipe == "удалить")
+				{
+					if (k > 0)
+					{
+						int* newStack = new int[size - 1];
+						for (int i = 0; i < size; i++)
+						{
+							newStack[i] = *&Stack[i];
+						}
+						size--;
+						k--;
+						cout << "  ";
+						for (int i = size - 1; i >= 0; i--)
+						{
+							cout << newStack[i] << " ";
+						}
+						cout << endl << endl;
+						for (int i = 0; i < size; i++)
+						{
+							Stack[i] = *&newStack[i];
+						}
+					}
+					else
+					{
+						cout << "\tУдаление не возможно, стек пуст! Введите другую команду!" << endl;
+					}
+
+				}
+				else
+				{
+					cin >> value;
+					int* newStack = new int[size + 1];
+					for (int i = 0; i < size; i++)
+					{
+						newStack[i] = *&Stack[i];
+					}
+					newStack[size] = value;
+					size++;
+					k++;
+					cout << "  ";
+					for (int i = size - 1; i >= 0; i--)
+					{
+						cout << newStack[i] << " ";
+					}
+					cout << endl << endl;
+					for (int i = 0; i < size; i++)
+					{
+						Stack[i] = *&newStack[i];
+					}
+				}
 			}
-			for (int i = 0; i < size; i++)
+			else
 			{
-				cout << newStack[i]<<" ";
+				cout << "Программа остановлена!" << endl << endl;
 			}
-			cout << endl;
 		}
 		else
 		{
-			cin >> value;
-			int *newStack = new int [size + 1];
-			for (int i = 0; i < size; i++)
-			{
-				newStack[i] = Stack[i];
-			}
-			newStack[size] = value;
-			size++;
-			for (int i = 0; i < size; i++)
-			{
-				cout << newStack[i]<<" ";
-			}
-			cout << endl;
+			cout << "Неизвестная команда! Введите команду заново!"<<endl<<endl;
 		}
-
 	}
+	delete[]Stack;
 }
